@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Automatically retrieves YouTube channel video data on a schedule using GitHub Actions and saves it to JSON.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "fetch": "node fetch-youtube.js"
@@ -17,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/AndrewAttemptsCode/youtube-video-fetcher/issues"
   },
-  "homepage": "https://github.com/AndrewAttemptsCode/youtube-video-fetcher#readme"
+  "homepage": "https://github.com/AndrewAttemptsCode/youtube-video-fetcher#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
 }
