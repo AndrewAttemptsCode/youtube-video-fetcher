@@ -1,4 +1,6 @@
 import "dotenv/config";
+import fs from "fs";
+import he from "he";
 
 const apiKey = process.env.YOUTUBE_API_KEY;
 const channelId = process.env.YOUTUBE_CHANNEL_ID;
@@ -17,11 +19,24 @@ const fetchVideos = async () => {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    console.log(JSON.stringify(data, null, 2));
+
+    if (!data.items) {
+      console.error("Error: Youtube API returned no videos");
+      return;
+    }
+
+    const latestVideos = data.items.map((item) => ({
+      videoId: item.id.videoId,
+      title: he.decode(item.snippet.title),
+      description: he.decode(item.snippet.description),
+      published: item.snippet.publishedAt,
+      thumbnail: item.snippet.thumbnails.high.url,
+    }));
+
+    fs.writeFileSync("./data.json", JSON.stringify(latestVideos, null, 2));
   } catch (err) {
     console.error(err.message);
   }
 };
 
 fetchVideos();
-console.log({ apiKey, channelId });
