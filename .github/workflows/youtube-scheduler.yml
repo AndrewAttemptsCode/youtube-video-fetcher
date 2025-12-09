@@ -1,29 +1,35 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Youtube channel video data fetcher
 
 on:
   schedule:
-    - cron: "0 0 * *"
+    - cron: "30 * * * *" # Runs every 30mins
 
 jobs:
-  build:
-
+  fetch-videos:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    env:
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
 
     steps:
     - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 22.x
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 22.x
         cache: 'npm'
+      
     - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+    - run: git config user.name "Github Actions"
+    - run: git config user.email "noreply@github.com"
+    - name: Fetch videos and update JSON
+      run: npm run fetch --if-present
+    - name: Commit and push updates
+      run: | 
+        git add data.json
+        if ! git diff --staged --quiet; then
+          git commit -m "Update data.json"
+          git push
+        else
+          echo "No changes to commit"
+        fi
