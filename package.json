@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/AndrewAttemptsCode/youtube-video-fetcher#readme",
   "dependencies": {
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "he": "^1.2.0"
   }
 }
