@@ -2,7 +2,7 @@ name: Youtube channel video data fetcher
 
 on:
   schedule:
-    - cron: "30 * * * *" # Runs every 30mins
+    - cron: "*/30 * * * *" # Runs every 30mins
 
 jobs:
   fetch-videos:
