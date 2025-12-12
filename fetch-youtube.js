@@ -25,7 +25,7 @@ const fetchVideos = async () => {
       return;
     }
 
-    const latestVideos = data.items.map((item) => ({
+    const latestVideos = data.items.slice(0, 20).map((item) => ({
       videoId: item.id.videoId,
       title: he.decode(item.snippet.title),
       description: he.decode(item.snippet.description),
